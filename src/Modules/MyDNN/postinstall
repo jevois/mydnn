@@ -1,0 +1,12 @@
+#!/bin/sh
+# This script is executed once after the module is installed by JeVois if it was added to the jevois/packages/ directory
+# of the microSD card as a .jvpkg file. The script is deleted from the microSD card after execution.
+#
+# The caller script will set the current directory to the location of this script before launching the script.
+
+# Add our video mappings to the main mappings file:
+jevois-add-videomapping JVUI 0 0 30.0 CropScale=RGB24@1024x576:YUYV 1920 1080 30.0 JeVois MyDNN
+
+# Example of a simple message:
+echo "MyDNN is now installed"
+

@@ -1,6 +1,7 @@
 # mydnn
 Sample custom C++ module for DNN processing on JeVois-Pro
 
+![Sample custom DNN screenshot](https://github.com/jevois/mydnn/blob/main/src/Modules/MyDNN/screenshot1.png?raw=true)
 
 INSTALLATION INSTRUCTIONS
 =========================

@@ -1,21 +1,20 @@
 #!/bin/bash
-# USAGE: rebuild-platform.sh [--staging|--microsd|--live] [cmake opts]
+# USAGE: rebuild-platform.sh [--jvpkg] [cmake opts]
+#
+# If --jvpkg is specified, then a jevois .jvpkg package will also be created
 
-# OPTIONS:
-# [none]    - install compiled modules to jvpkg/ for later packing by make jvpkg
-# --staging - install to microSD staging area /var/lib/jevois-microsd/
-# --microsd - install directly to microSD card inserted into host computer
-# --live    - install directly to microSD card inside running JeVois connected to host computer
+set -e
 
-extra=""
-if [ "X$1" = "X--staging" ]; then extra="-DJEVOIS_MODULES_TO_STAGING=ON"; shift; fi
-if [ "X$1" = "X--microsd" ]; then extra="-DJEVOIS_MODULES_TO_MICROSD=ON"; shift; fi
-if [ "X$1" = "X--live" ]; then extra="-DJEVOIS_MODULES_TO_LIVE=ON"; shift; fi
+create_jvpkg="no"
+if [ "X$1" = "X--jvpkg" ]; then create_jvpkg="yes"; shift; fi
 
-sudo /bin/rm -rf pbuild \
-    && mkdir pbuild \
-    && cd pbuild \
-    && cmake "${extra} $@" -DJEVOIS_PLATFORM=ON .. \
-    && make -j \
-    && sudo make install
+# Let's build it:
+sudo /bin/rm -rf pbuild
+mkdir pbuild
+cd pbuild
+cmake "$@" -DJEVOIS_PLATFORM=ON ..
+make -j
+sudo make install
+cd ..
 
+if [ $create_jvpkg = "yes" ]; then jevois-jvpkg `cat pbuild/jvpkg-args`; fi
